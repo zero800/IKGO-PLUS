@@ -158,11 +158,13 @@ type PowerBar struct {
 	snd          *Snd
 	pos          [2]int32
 	range_x      [2]int32
+	partial_bar	 int32
 	bg0          AnimLayout
 	bg1          AnimLayout
 	bg2          AnimLayout
 	mid          AnimLayout
 	front        AnimLayout
+	fullfront    AnimLayout
 	counter_font [3]int32
 	counter_lay  Layout
 	level_snd    [3][2]int32
@@ -181,11 +183,13 @@ func readPowerBar(pre string, is IniSection,
 	pb := newPowerBar(snd)
 	is.ReadI32(pre+"pos", &pb.pos[0], &pb.pos[1])
 	is.ReadI32(pre+"range.x", &pb.range_x[0], &pb.range_x[1])
+	is.ReadI32(pre+"partial_bar", &pb.partial_bar)
 	pb.bg0 = *ReadAnimLayout(pre+"bg0.", is, sff, at, 0)
 	pb.bg1 = *ReadAnimLayout(pre+"bg1.", is, sff, at, 0)
 	pb.bg2 = *ReadAnimLayout(pre+"bg2.", is, sff, at, 0)
 	pb.mid = *ReadAnimLayout(pre+"mid.", is, sff, at, 0)
 	pb.front = *ReadAnimLayout(pre+"front.", is, sff, at, 0)
+	pb.fullfront = *ReadAnimLayout(pre+"fullfront.", is, sff, at, 0)
 	is.ReadI32(pre+"counter.font", &pb.counter_font[0], &pb.counter_font[1],
 		&pb.counter_font[2])
 	pb.counter_lay = *ReadLayout(pre+"counter.", is, 0)
@@ -219,6 +223,7 @@ func (pb *PowerBar) step(power float32, level int32) {
 	pb.bg2.Action()
 	pb.mid.Action()
 	pb.front.Action()
+	pb.fullfront.Action()
 }
 func (pb *PowerBar) reset() {
 	pb.bg0.Reset()
@@ -226,6 +231,7 @@ func (pb *PowerBar) reset() {
 	pb.bg2.Reset()
 	pb.mid.Reset()
 	pb.front.Reset()
+	pb.fullfront.Reset()
 }
 func (pb *PowerBar) bgDraw(layerno int16) {
 	pb.bg0.Draw(float32(pb.pos[0]), float32(pb.pos[1]), layerno)
@@ -233,7 +239,7 @@ func (pb *PowerBar) bgDraw(layerno int16) {
 	pb.bg2.Draw(float32(pb.pos[0]), float32(pb.pos[1]), layerno)
 }
 func (pb *PowerBar) draw(layerno int16, power float32,
-	level int32, f []*Fnt) {
+	level int32, f []*Fnt, fullpower float32, fullpowermax float32) {
 	width := func(power float32) (r [4]int32) {
 		r = sys.scrrect
 		if pb.range_x[0] < pb.range_x[1] {
@@ -250,6 +256,16 @@ func (pb *PowerBar) draw(layerno int16, power float32,
 		return
 	}
 	pr, mr := width(power), width(pb.midpower)
+	
+	//calcule partial bar
+	lvpower := power * (fullpowermax / 1000.0) - float32(level)	
+    if pb.partial_bar > 0{ 
+		pr = width(lvpower)
+			if((fullpowermax / 1000.0) == float32(level)){
+				pr = width(1.0);
+		    }  		
+	} 	 	
+	
 	if pb.range_x[0] < pb.range_x[1] {
 		mr[0] += pr[2]
 	}
@@ -258,6 +274,10 @@ func (pb *PowerBar) draw(layerno int16, power float32,
 		layerno, &pb.mid.anim)
 	pb.front.lay.DrawAnim(&pr, float32(pb.pos[0]), float32(pb.pos[1]), 1,
 		layerno, &pb.front.anim)
+	if fullpower == fullpowermax{
+		pb.fullfront.lay.DrawAnim(&pr, float32(pb.pos[0]), float32(pb.pos[1]), 1,
+		layerno, &pb.fullfront.anim)
+	}	
 	if pb.counter_font[0] >= 0 && int(pb.counter_font[0]) < len(f) {
 		pb.counter_lay.DrawText(float32(pb.pos[0]), float32(pb.pos[1]), 1,
 			layerno, fmt.Sprintf("%v", level),
@@ -1689,7 +1709,7 @@ func (l *Lifebar) draw(layerno int16) {
 			for i := ti; i < l.num[1][ti]; i += 2 {
 				l.pb[l.ref[1][ti]][i].draw(layerno, float32(sys.chars[i][0].power)/
 					float32(sys.chars[i][0].powerMax), sys.chars[i][0].power/1000,
-					l.fnt[:])
+					l.fnt[:], float32(sys.chars[i][0].power), float32(sys.chars[i][0].powerMax))
 			}
 		}
 		for ti := range sys.tmode {

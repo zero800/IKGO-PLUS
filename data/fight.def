@@ -400,12 +400,18 @@ p2.range.x = 0,127
 
 ;-----------------------------------------------------------
 [Powerbar]
+
+; Ikemen feature: use p1.fullfront.spr or p1.fullfront.anim for show different Full power bar. 
+; Ikemen feature: use p1.partial_bar > 0 for show partial bar (Full every 1000) like kof games.  
+
 ;Player 1
 p1.pos    = 140,22
 p1.bg0.anim = 40
 p1.bg1.spr = 41,0
 ;p1.mid.spr = 42,0
 p1.front.spr = 43,0
+p1.fullfront.anim = 41
+p1.partial_bar = 1
 p1.range.x = 0,-107
 p1.counter.offset = -108,6
 p1.counter.font = 1,0, 0
@@ -433,6 +439,11 @@ level3.snd = 21,0
 
 [Begin Action 40] ;Darkened powerbar background 
 40,0, 0,0, 1, , S
+
+[Begin Action 41] ;Full power bar  
+43,0, 0,0, 3,, 
+43,0, 0,0, 1,, S
+40,0, 0,0, 3,, 
 
 ; Ikemen feature
 ;[Simul Powerbar]
