@@ -1,0 +1,478 @@
+;-------------------------------------------------------------------------------
+[Characters]
+ ;How to add characters
+ ;---------------------
+ ;Use the format:
+ ;    charname, stagefilename1, stagefilename2, ...
+ ;
+ ;e.g. For a player with filename "kfm", and stage filename
+ ;"stages/mybg.def" type (without the semicolon):
+ ;    kfm, stages/mybg.def
+ ;IKEMEN feature: There can be more than 1 stage assigned to character. In such
+ ;case stage will be chosen randomly.
+ ;
+ ;If you want to load a different def file, you can enter it as a directory plus
+ ;the def file. This example loads chars/kfm/alt-kfm.def:
+ ;    kfm/alt-kfm.def, stages/mybg.def
+ ;
+ ;If you put "random" as the stagefilename, then a random stage will be selected
+ ;for that player. e.g.
+ ;    kfm, random
+ ;IKEMEN feature: Not really needed since no stage = random anyway.
+ ;
+ ;Optional parameters should follow on the same line, separated by commas.
+ ;Each parameter has the form:
+ ;    paramname = paramvalue
+ ;where paramname is the name of the parameter type, and paramvalue is the value
+ ;(data) that should be assigned to that parameter. The only exception is the
+ ;'rivals' parameter in which paramname is not pre-set and paramvalue needs to
+ ;be additionally enclosed in {} brackets.
+ ;
+ ;The optional parameters are:
+ ;
+ ; - music
+ ;   Set the paramvalue to the music file path that should be used at the start
+ ;   of round when facing this character. Optionally music volume can follow
+ ;   after space. paramvalue overrides stage DEF bgmusic assignment, so you can
+ ;   re-use the same stage with unique music for multiple characters.
+ ;   IKEMEN feature: You can assign multiple music parameters (random selection)
+ ;
+ ; - musicalt
+ ;   IKEMEN feature: Set the paramvalue to the music file path that should be
+ ;   used during conclusion round (round that can end the match) when facing
+ ;   this character. Optionally music volume can follow after space. paramvalue
+ ;   overrides stage DEF bgmusicalt assignment. You can assign multiple musicalt
+ ;   parameters (random selection)
+ ;
+ ; - musiclife
+ ;   IKEMEN feature: Set the paramvalue to the music file path that should be
+ ;   used when player's controlled character has (by default) less then 30% life
+ ;   during conclusion round (only affects side that is at risk of being
+ ;   defeated) when facing this character. Further adjustments available via
+ ;   stage DEF file. Optionally music volume can follow after space. paramvalue
+ ;   overrides stage DEF bgmusiclife assignment. You can assign multiple
+ ;   musiclife parameters (random selection)
+ ;
+ ; - zoom
+ ;   IKEMEN feature: Set the paramvalue to 0 to avoid stage zoom even if it is
+ ;   enabled globally. Useful for characters that don't work well with zoom (for
+ ;   example bonus characters)
+ ;
+ ; - ai
+ ;   IKEMEN feature: Set the paramvalue between 1 and 8 to force AI Level
+ ;   regardless of difficulty and AI ramping settings.
+ ;
+ ; - winscreen
+ ;   IKEMEN feature: Set the paramvalue to 0 to avoid displaying victory screen
+ ;   after beating this character.
+ ;
+ ; - rounds
+ ;   IKEMEN feature: Set the paramvalue to the number of rounds in order to
+ ;   overwrite rounds number chosen in the settings.
+ ;
+ ; - time
+ ;   IKEMEN feature: Set the paramvalue to the time (in seconds) in order to
+ ;   overwrite round time chosen in the settings.
+ ;
+ ; - lifebar
+ ;   IKEMEN feature: set the paramvalue to the relative path (starting from main
+ ;   ikemen directory) to the lifebar that should be used during match instead
+ ;   of default lifebar assigned to screenpack.
+ ;
+ ; - onlyme
+ ;   IKEMEN feature: Set the paramvalue to 1 to force facing this character
+ ;   individually even in Simul/Tag team modes.
+ ;
+ ; - includestage
+ ;   Set the paramvalue to 0 to avoid including this stage in the stage select
+ ;   list (in VS, training modes, etc)
+ ;
+ ; - boss
+ ;   IKEMEN feature: Set the paramvalue to 1 to include this character in "Boss
+ ;   Rush" mode.
+ ;
+ ; - bonus
+ ;   IKEMEN feature: Set the paramvalue to 1 to include this character in "Bonus
+ ;   Games" mode.
+ ;
+ ; - exclude
+ ;   IKEMEN feature: Set the paramvalue to 1 to avoid including this character
+ ;   in 'rows' and 'columns' screenpack selection grid. (similar result as
+ ;   hiding unselectable AI only characters in mugen without need to create tons
+ ;   of unnecessary select.def slots to do so) Excluded characters are not added
+ ;   to randomselect pool.
+ ;
+ ; - hidden
+ ;   IKEMEN feature: Set the paramvalue to hide a character:
+ ;   1: cursor can move to this cell, face and face background are not rendered
+ ;      (same result as hiding selectable characters in mugen by placing them
+ ;      outside visible grid, but without need to create lots of unnecessary
+ ;      select.def slots to do so),
+ ;   2: cell can't be selected, art is not rendered (slot is ignored until
+ ;      character is unlocked).
+ ;   3: cell behaves like randomselect slot until character is unlocked.
+ ;   Unlocking hidden characters is handled via [UnlockContent] section.
+ ;
+ ; - order
+ ;   Set the paramvalue to the ordering priority to give the character in arcade
+ ;   mode (1 by default). A smaller value means you will fight the character
+ ;   sooner. You will never fight an order 2 character before an order 1
+ ;   character, and never an order 3 character before an order 2 one. For
+ ;   example, you might want to set your boss character to have order=3. The
+ ;   default order value is 1 if you omit this param. See *.maxmatches under
+ ;   [Options], which limits the number of matches per order priority.
+ ;   IKEMEN feature: Max 30 orders mugen limitation is lifted.
+ ;
+ ; - 1, 2, 3, ... (rivals)
+ ;   IKEMEN feature: The parameter alters standard arcade order system and other
+ ;   default match settings, allowing to force pre-defined matches along the
+ ;   way. paramname refers to arcade match number (for example 4 = 4th match).
+ ;   paramvalue, enclosed in {} brackets, follows the same syntax as adding a
+ ;   new character with optional stage assignment and accepts following optional
+ ;   char parameters: music, musicalt, musiclife, zoom, ai, winscreen, rounds,
+ ;   time, lifebar, onlyme. If 'onlyme' parameter is not set and you're playing
+ ;   in team mode the referenced character becomes the opposite team leader, and
+ ;   other characters follows order settings. Chars and stages referenced here,
+ ;   if not already present in [Characters] and [ExtraStages] sections as
+ ;   separate entries, won't be selectable in select screen.
+ ;
+ ; - maxmatches
+ ;   IKEMEN feature: This parameter makes the character ignore default
+ ;   *.maxmatches settings under [Options] section and assign different ones
+ ;   instead, allowing you to set up custom maximum number of matches to fight
+ ;   before game ends in arcade mode, as well as order priority. paramvalue is
+ ;   used as a prefix to the original names of these settings, followed by dot,
+ ;   so the new entries added under [Options] section should look like this:
+ ;   'paramvalue.arcade.maxmatches', 'paramvalue.team.maxmatches'.
+ ;
+ ;You can also add a randomize icon to the select screen. To do this, put the
+ ;word "randomselect" on a line of its own, with no extra parameters.
+ ;
+ ;Examples:
+ ; kfm, stages/mybg.def, includestage=0
+ ; kfm, stages/mybg.def, maxmatches=somename
+ ; kfm, stages/mybg.def, 3={SuaveDude, stages/mybg2.def}
+ ; kfm, stages/mybg.def, music=sound/song.mp3, order=3, ai=8, hidden=2
+ ; kfm, stages/mybg.def, stages/mybg2.def, music=sound/song.mp3
+ ;
+ ;Insert your characters below.
+
+kfm, 1={kfm}, order=1, stages/kfm.def
+
+;-------------------------------------------------------------------------------
+[ExtraStages]
+ ;Put extra stages here. They will be available in VS and Watch modes.
+ ;For example, you can insert "stages/mybg.def".
+ ;
+ ;Optional parameters may follow on the same line, separated by commas.
+ ;Each parameter has the form:
+ ;    paramname = paramvalue
+ ;where paramname is the name of the parameter type, and paramvalue is the value
+ ;to assign that parameter. The optional parameters are:
+ ;
+ ; - music
+ ;   IKEMEN feature: Set the paramvalue to the music file path that should be
+ ;   used at the start of round. Optionally music volume can follow after space.
+ ;   Tracks will be played randomly from available music pool if bgmusic is also
+ ;   present in the stage DEF file or multiple music parameters have been
+ ;   assigned here.
+ ;
+ ; - musicalt
+ ;   IKEMEN feature: Set the paramvalue to the music file path that should be
+ ;   used during conclusion round. Optionally music volume can follow after
+ ;   space. Tracks will be played randomly from available music pool if
+ ;   bgmusicalt is also present in the stage DEF file or multiple musicalt
+ ;   parameters have been assigned here.
+ ;
+ ; - musiclife
+ ;   IKEMEN feature: Set the paramvalue to the music file path that should be
+ ;   used when player's controlled character has (by default) less then 30% life
+ ;   during conclusion round (health percentage and rounds can be adjusted with
+ ;   stage DEF file [Music] parameters). Optionally music volume can follow
+ ;   after space. Tracks will be played randomly from available music pool if
+ ;   bgmusiclife is also present in the stage DEF file or multiple musiclife
+ ;   parameters have been assigned here.
+ ;
+ ; - zoom
+ ;   IKEMEN feature: Set the paramvalue to 0 to avoid stage zoom even if it is
+ ;   enabled globally. And the other way around.
+ ;
+ ; - zoomMin
+ ;   IKEMEN feature: Set the paramvalue to overwrite global maximum zoom out
+ ;   setting for this particular stage.
+ ;
+ ; - zoomMax
+ ;   IKEMEN feature: Set the paramvalue to overwrite global maximum zoom in
+ ;   setting for this particular stage.
+ ;
+ ; - zoomSpeed
+ ;   IKEMEN feature: Set the paramvalue to overwrite global zoom speed setting
+ ;   for this particular stage.
+ ;
+ ;Examples:
+ ; stages/mybg.def, music=sound/song.mp3, music=sound/song2.mp3
+ ; stages/mybg.def, zoom=0
+ ; stages/mybg.def, zoom=1, zoomMin=0.75, zoomMax=1.1, zoomSpeed=1
+ ;
+ ;Insert your stages below.
+
+stages/kfm.def
+stages/stage0.def
+stages/shrine-ow2014.def
+
+;-------------------------------------------------------------------------------
+[StoryMode]
+ ;IKEMEN feature: Story mode arcs selectable from main menu. List of available
+ ;story mode arcs is generated automatically based on this data. Story mode
+ ;won't be visible in main menu if there are no story arcs declared.
+ ;
+ ; Each story arc declaration consists of following parameters:
+ ; modename:    Unique name of the mode (must be different then any mode name
+ ;              listed in [UnlockContent] section)
+ ; displayname: Name of the arc that will be displayed in main menu
+ ; data:        path to the JSON table that contains all story arc data OR path
+ ;              to LUA file where you can code whole story mode from scratch,
+ ;              ignoring everything described below.
+ ;
+ ;JSON's appeal is that it is both compact and human readable/editable solution
+ ;for representing complex data structures. First of all you should familiarize
+ ;yourself with the syntax: https://www.freeformatter.com/json-validator.html
+ ;
+ ; Each JSON object in a top array can store following data (key:value pair)
+ ; if:     String containing all trigger statements. The equality and relational
+ ;         operators (==, !=, >, >=, <, <=), as well as nesting, are supported.
+ ;         You can also check multiple statements at once with && (and), || (or)
+ ;         operators. Following statement types are supported:
+ ;         - variables and scene variables (use any name, starting with 'var.'
+ ;           prefix)
+ ;         - match variables (automatically set during match, starting with
+ ;          'match.' prefix) (list available below)
+ ;         - character name (check via 'name.X', where X is player num 1 to 8)
+ ; scene:  Path to one of the following file formats:
+ ;         - mugen style storyboard DEF file (extended with Visual Novel
+ ;           like features)
+ ;         - movie file in WebM format (not supported yet)
+ ; match:  Sub-object used for overwriting default/previous match data
+ ;         - p1team: array containing P1 side character filenames (or full paths
+ ;           to DEF files) (can be left empty if you use 'select' flag). Random
+ ;           chars can be assigned via 'randomselect' name or 'orderX' name
+ ;           (where X refers to 'order' paramvalue)
+ ;         - p2team: array containing P2 side character filenames (or full paths
+ ;           to DEF files). Random chars can be assigned via 'randomselect' name
+ ;           or 'orderX' name (where X refers to 'order' paramvalue)
+ ;         - p1life: array for adjusting P1 side chars starting life percentage
+ ;         - p2life: array for adjusting P2 side chars starting life percentage
+ ;         - p1power: array for adjusting P1 side chars starting power level
+ ;         - p2power: array for adjusting P2 side chars starting power level
+ ;         - p1mode: 0=Single, 1=Simul, 2=Turns, 3=Tag (0 by default)
+ ;         - p2mode: 0=Single, 1=Simul, 2=Turns, 3=Tag (0 by default)
+ ;         - stage: stage DEF file path (e.g. "stages/mybg.def")
+ ;         - music: path to music file that should overwrite stage music.
+ ;           Optionally volume can follow after space.
+ ;         - musicalt: path to music file that should overwrite stage music on
+ ;           during conclusion round. Optionally volume can follow after space.
+ ;         - musiclife: path to music file that should overwrite stage music
+ ;           when player has less than 30% health during conclusion round.
+ ;           Optionally volume can follow after space.
+ ;         - zoom: set to 0 to avoid stage zoom even if it is enabled globally.
+ ;           Useful for characters that don't work well with zoom
+ ;         - ai: set to value between 1 and 8 to force AI Level regardless of
+ ;           difficulty chosen in the settings
+ ;         - winscreen: set to 0 to avoid displaying win screen after beating
+ ;           the opponent team
+ ;         - rounds: set the number of rounds to overwrite rounds number chosen
+ ;           in the settings
+ ;         - time: set the time (in seconds) to overwrite default round time
+ ;         - lifebar: path to the lifebar that should be used instead of the
+ ;           default one (Ikemen GO Plus comes with dummy lifebar
+ ;           ("data/fight_blank.def") which starts the match without delays and
+ ;           doesn't use any art - may be useful for creating cinematic matches
+ ;           with scenes coded in CNS files.)
+ ; action: Array with special actions that should be used: (can be more than 1)
+ ;         - select: displays character select screen (overwrites 'p1team' match
+ ;           data if used, team mode follows 'p1mode' setting)
+ ;         - cleared: flags this story mode arc as cleared
+ ;         - end: ends the story mode arc (returns to main menu)
+ ; setvar: Sub-object containing a list of variables to set - member key is var
+ ;         name (starting with 'var.' prefix), member value is variable value to
+ ;         set (can be another var)
+ ;
+ ;Story mode arcs loops through whole top array trying to find valid 'if'
+ ;statement. The valid object starts either 'scene' or 'match' members and/or
+ ;uses 'action'. The last (optional) task of the valid object is setting vars
+ ;via 'setvar' member. Then the loop restarts from the beginning of top array.
+ ;
+ ;Storyboard scenes can set variables too. Also each fight automatically sets
+ ;following variables:
+ ;- match.winside: 1=Player1 side won, 2=Player2 side won
+ ;- <wip: add a list of all match variables here>
+ ;
+ ;Once you understand the basic concept of this data structure you should be
+ ;able to create both simple and more complicated, branching storylines with
+ ;different story routes, endings etc. Consider installing JSON syntax
+ ;highlighter, preparing a flowchart beforehand, and using self-explanatory var
+ ;names to limit mistakes during table creation. Check out "story_kfm" images in
+ ;docs directory to visualize sample story tables distributed with the engine.
+ ;
+ ;Declare your story mode arcs below.
+
+modename = story_kfm1
+displayname = "Kung Fu Story"
+data = data/story_kfm1.json
+
+modename = story_kfm2
+displayname = "Kung Fu Temple"
+data = data/story_kfm2.json
+
+;-------------------------------------------------------------------------------
+[UnlockContent]
+ ;IKEMEN feature: Unlock in-game content by fulfilling game progress conditions.
+ ;Characters are locked via [Characters] 'hidden' parameter flag. Stages and
+ ;modes are automatically hidden when any condition for unlocking them exists.
+ ;---------------------
+ ; Use the format:
+ ; type:name = (condition_1), (condition_2), (...)
+ ;
+ ; type:name construct sets what content should be unlocked:
+ ; char:  Character filename (or full path to DEF file)
+ ; stage: Path to stage DEF file
+ ; mode:  Mode reference:
+ ;        - arcade: Arcade Mode
+ ;        - versus: Versus Mode
+ ;        - teamcoop: Team Co-op Mode
+ ;        - survival: Survival Mode
+ ;        - survivalcoop: Survival Co-op Mode
+ ;        - training: Training Mode
+ ;        - netplayversus: Netplay Versus Mode
+ ;        - netplayteamcoop: Netplay Team Co-op Mode
+ ;        - netplaysurvivalcoop: Netplay Survival Co-op Mode
+ ;        - freebattle: Free Battle Mode
+ ;        - 100kumite: VS 100 Kumite Mode
+ ;        - bossrush: Boss Rush Mode
+ ;        When it comes to individual bonuses (generated via bonus=1 char param)
+ ;        name of the mode is the same as 'name' set in [Info] section of char
+ ;        DEF file. Story Mode arcs use the 'modename' from [StoryMode] section.
+ ;
+ ; Condition consists of declarations: stat, op, value, mode, char, tmode
+ ; If there is only 1 condition brackets can be omitted. "stat", "op", "value"
+ ; parameters are required. Save file tracks stats for each mode, character and
+ ; team mode individually allowing you to be specific when declaring stat
+ ; conditions via optional "mode", "char", "tmode" parameters.
+ ;
+ ; stat:  Game stat that should be checked.
+ ;        Stats tracked globally:
+ ;        - gametime: total amount of time played
+ ;        Stats tracked after each match:
+ ;        - matches: played matches count
+ ;        - wins: won matches count
+ ;        - loose: lost matches count
+ ;        - draws: draw matches count
+ ;        - rankd: total rank D count
+ ;        - rankc: total rank C count
+ ;        - rankb: total rank B count
+ ;        - ranka: total rank A count
+ ;        - ranks: total rank S count
+ ;        - rankss: total rank SS count
+ ;        Stats tracked after mode is cleared:
+ ;        - cleared: mode cleared count
+ ;        - consecutive: max consecutive won matches count
+ ;        - perfects: max perfect matches count
+ ;        - continues: min continuous count
+ ;        - score: max total score
+ ;        - cleartime: min clear time (in seconds)
+ ;        - difficulty: max AI level used to clear the mode
+ ; op:    The equality and relational operators between stat and value:
+ ;        ==, !=, >, >=, <, <=
+ ; value: Condition stat value
+ ; mode:  Game mode that stat check should be limited to. Use names from the
+ ;        above mentioned 'modename' list. If not set all modes will be taken
+ ;        into account (the value will be sum of counts, min or max)
+ ; char:  Character filename (or full path to DEF file) Stat check will be
+ ;        limited to this character. If not set stat check takes into account
+ ;        all characters (the value will be sum of counts, min or max)
+ ; tmode: Team mode that stat check should be optionally limited to. Options:
+ ;        - 0: Single
+ ;        - 1: Simul
+ ;        - 2: Turns
+ ;        - 3: Tag
+ ;
+ ;Examples:
+ ; Unlock kfm if total amount of time played is greater then 1 hour:
+ ; char:kfm = gametime, >, 3600
+ ;
+ ; Unlock SuaveDude if:
+ ; - arcade mode (Single) has been cleared at least 1 time with Kung Fu Man
+ ; - total time played is greater then 1 hour
+ ; char:SuaveDude = (cleared, >=, 1, arcade, kfm, 0), (gametime, >, 3600)
+ ;
+ ; Unlock stage if VS 100 Kumite Mode has been cleared in less than 1 hour
+ ; stage:stages/mybg.def = cleartime, <, 3600, 100kumite
+ ;
+ ; Unlock "story_kfm2" story mode arc if "story_kfm1" arc has been cleared
+ ; mode:story_kfm2 = cleared, !=, 0, story_kfm1
+ ;
+ ;Insert your conditions for content unlocking below.
+
+mode:story_kfm2 = cleared, >=, 1, story_kfm1
+
+;-------------------------------------------------------------------------------
+[Options]
+ ;Here you set the maximum number of matches to fight before game ends in arcade
+ ;mode. The first number is the number of matches against characters with
+ ;order=1, followed by order=2 and order=3 respectively. For example, for 4,3,1
+ ;you will fight up to 4 randomly-picked characters who have order=1, followed
+ ;by 3 with order=2 and 1 with order=3.
+ ;IKEMEN feature: Max 30 orders mugen limitation is lifted.
+ ;IKEMEN feature: Characters can use individual maxmatches settings (see
+ ;'maxmatches' parameter in [Characters] section)
+
+arcade.maxmatches = 6,1,1,0,0,0,0,0,0,0
+
+ ;Maximum number of matches to fight before game ends in team mode.
+ ;Like arcade.maxmatches, but applies to Team Battle.
+
+team.maxmatches = 4,1,1,0,0,0,0,0,0,0
+
+ ;AI ramping
+ ;IKEMEN feature: AI ramping settings has been moved here from mugen.cfg
+ ;You can view AI ramping output for all battles from the last chosen mode via
+ ;debug/t_aiRamp.txt (useful reference also for vanilla mugen).
+
+ ;Arcade mode AI ramping
+ ;For both parameters below, the first number corresponds to the number of
+ ;matches won, and the second number to the AI difficulty offset. The actual
+ ;difficulty is the sum of the AI difficulty level (set in the options menu) and
+ ;the value of the offset at a particular match.
+ ;  AIramp.start = start_match, start_diff
+ ;  AIramp.end   = end_match, end_diff
+ ;The difficulty offset function is a constant value of start_diff from the
+ ;first match until start_match matches have been won. From then the offset
+ ;value increases linearly from start_diff to end_diff. After end_diff matches
+ ;have been won, the offset value is end_diff.
+ ;  e_d            /----------
+ ;               /
+ ;  s_d _______/
+ ;     ^      ^     ^        ^
+ ;   1st_m   s_m   e_m     last_m
+ ;For example, if you have:
+ ;  AIramp.start = 2,0
+ ;  AIramp.end   = 4,2
+ ;For 6 matches at level 4, the difficulty will be (by match):
+ ;  4,4,4,5,6,6
+
+arcade.AIramp.start = 2, 0
+arcade.AIramp.end   = 4, 2
+
+ ;Team Mode AI ramping
+ ;For 4 matches at level 4 and default values, the difficulty will be:
+ ;  4,4,5,6
+
+team.AIramp.start = 1, 0
+team.AIramp.end   = 3, 2
+
+ ;Survival Mode AI ramping
+ ;For 16 matches at level 4 and default values, the difficulty will be:
+ ;  1,1,1,2,2,3,3,4,4,4,5,5,6,6,7,7,8
+
+survival.AIramp.start = 0, -3
+survival.AIramp.end   = 16, 4

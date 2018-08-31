@@ -1,0 +1,95 @@
+//https://www.freeformatter.com/json-validator.html
+[{
+	"if": "var.chapter01 == 0",
+	"scene": "chars/kfm/story/arc2_chapter01.def",
+	"setvar": {
+		"var.chapter01": 1
+	}
+}, {
+	"if": "var.chapter01 == 1",
+	"scene": "data/intro.def",
+	"setvar": {
+		"var.chapter01": 2
+	}
+}, {
+	"if": "var.chapter01 == 2",
+	"scene": "chars/kfm/story/arc2_chapter01b.def",
+	"setvar": {
+		"var.chapter01": 3
+	}
+}, {
+	"if": "var.chapter01 == 3",
+	"match": {
+		"p1team": ["kfm"],
+		"p2team": ["kfm", "kfm"],
+		"p2mode": 3,
+		"stage": "stages/kfm.def"
+	},
+	"setvar": {
+		"var.chapter01": -1,
+		"var.battle01": "match.winside"
+	}
+}, {
+	"if": "var.battle01 == 2 || var.battle03 == 2",
+	"scene": "chars/kfm/story/arc2_lost.def",
+	"setvar": {
+		"var.battle01": -1,
+		"var.battle03": -1,
+		"var.gameover": 1
+	}
+}, {
+	"if": "var.gameover == 1",
+	"scene": "data/gameover.def",
+	"flags": ["end"]
+}, {
+	"if": "var.battle01 == 1",
+	"scene": "chars/kfm/story/arc2_chapter02.def",
+	"setvar": {
+		"var.battle01": 3
+	}
+}, {
+	"if": "var.battle01 == 3",
+	"match": {
+		"p1team": ["kfm"],
+		"p2team": ["kfm", "kfm", "kfm"],
+		"p2mode": 1,
+		"stage": "stages/kfm.def",
+		"ai": 8
+	},
+	"setvar": {
+		"var.battle01": -1,
+		"var.battle02": "match.winside"
+	}
+}, {
+	"if": "var.battle02 == 2",
+	"scene": "chars/kfm/story/arc2_chapter03_branch.def",
+	"setvar": {
+		"var.battle02": 3
+	}
+}, {
+	"if": "var.battle02 == 3",
+	"match": {
+		"p1team": ["kfm", "kfm"],
+		"p2team": ["kfm", "kfm"],
+		"p1mode": 1,
+		"p2mode": 1,
+		"stage": "stages/kfm.def",
+		"ai": 8
+	},
+	"setvar": {
+		"var.battle02": -1,
+		"var.battle03": "match.winside"
+	}
+}, {
+	"if": "var.battle02 == 1 || var.battle03 == 1",
+	"scene": "chars/kfm/story/arc2_chapter03.def",
+	"setvar": {
+		"var.battle02": -1,
+		"var.battle03": -1,
+		"var.credits": 1
+	}
+}, {
+	"if": "var.credits == 1",
+	"scene": "data/credits.def",
+	"flags": ["cleared", "end"]
+}]

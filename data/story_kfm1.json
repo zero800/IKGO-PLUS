@@ -1,0 +1,83 @@
+//https://www.freeformatter.com/json-validator.html
+//"not needed" comments means that even without those lines the story mode would work correctly (loop starts from the beginning with valid 'if' match along the way)
+[{
+	"if": "var.chapter01 == 0",
+	"scene": "chars/kfm/story/arc1_chapter01.def",
+	"setvar": {
+		"var.chapter01": 1
+	}
+}, {
+	"if": "var.chapter01 == 1 || var.chapter01_cont == 1",
+	"match": {
+		"p1team": ["kfm"],
+		"p2team": ["kfm"],
+		"stage": "stages/stage0.def"
+	},
+	"setvar": {
+		"var.chapter01": -1,
+		"var.chapter01_cont": -1,
+		"var.battle01": "match.winside"
+	}
+}, {
+	"if": "var.battle01 == 2",
+	"scene": "chars/kfm/story/arc1_continue.def", //sets "var.continue" variable (1=yes, 2=no)
+	"setvar": {
+		"var.battle01": -1, //not needed
+		"var.chapter01_cont": "var.continue"
+	}
+}, {
+	"if": "var.chapter01_cont == 2 || var.chapter02_cont == 2 || var.gameover == 1",
+	"scene": "data/gameover.def",
+	"flags": ["end"]
+}, {
+	"if": "var.battle01 == 1",
+	"scene": "chars/kfm/story/arc1_chapter02.def",
+	"setvar": {
+		"var.battle01": -1,
+		"var.chapter02": 1
+	}
+}, {
+	"if": "var.chapter02 == 1 || var.chapter02_cont == 1",
+	"match": {
+		"p1team": ["kfm"],
+		"p2team": ["kfm", "kfm", "kfm"],
+		"p2mode": 2,
+		"stage": "stages/stage0.def",
+		"rounds": 1
+	},
+	"setvar": {
+		"var.chapter02": -1,
+		"var.chapter01_cont": -1,
+		"var.battle02": "match.winside"
+	}
+}, {
+	"if": "var.battle02 == 2",
+	"scene": "chars/kfm/story/arc1_continue.def", //sets "var.continue" variable (1=yes, 2=no)
+	"setvar": {
+		"var.battle02": -1, //not needed
+		"var.chapter02_cont": "var.continue"
+	}
+}, {
+	"if": "var.battle02 == 1",
+	"scene": "chars/kfm/story/arc1_chapter03.def", //sets "var.chapter03" variable (1=yes, 2=no)
+	"setvar": {
+		"var.battle02": -1
+	}
+}, {
+	"if": "var.chapter03 == 1",
+	"scene": "chars/kfm/story/arc1_chapter03_yes.def",
+	"setvar": {
+		"var.chapter03": 3
+	}
+}, {
+	"if": "var.chapter03 == 2",
+	"scene": "chars/kfm/story/arc1_chapter03_no.def",
+	"setvar": {
+		"var.chapter03": -1, //not needed
+		"var.gameover": 1
+	}
+}, {
+	"if": "var.chapter03 == 3",
+	"scene": "data/credits.def",
+	"flags": ["cleared", "end"]
+}]
