@@ -14,3 +14,6 @@ In Fight.def -> [Powerbar] use "p1.fullfront.spr" or "p1.fullfront.anim" for sho
 3. Partial counter for Powerbar.
 In Fight.def -> [Powerbar] use p1.partial_bar > 0 for show partial bar (Full every 1000) like kof games. 
 
+4. Play Sound for Maximum Power Level
+In Fight.def -> [Powerbar] use 'level5.snd' for play sond when Power = MaxPower (Maximum Level) 
+

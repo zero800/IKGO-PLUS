@@ -434,8 +434,14 @@ p2.counter.font = 1,0, 0
 level1.snd = 21,0
 level2.snd = 21,0
 level3.snd = 21,0
+;level4.snd = 21,0
+
+;level5.snd = 21,0
+
 ; Ikemen feature: use 'pX.' prefix in order to differentiate levelX sounds among
 ; players or set the paramvalue to '-1, 0' to disable it for particular player
+; Ikemen feature: use 'level5.snd' for play sond when Power = MaxPower (Maximum Level)  
+
 
 [Begin Action 40] ;Darkened powerbar background 
 40,0, 0,0, 1, , S

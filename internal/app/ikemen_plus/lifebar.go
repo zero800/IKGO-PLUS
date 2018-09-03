@@ -167,7 +167,7 @@ type PowerBar struct {
 	fullfront    AnimLayout
 	counter_font [3]int32
 	counter_lay  Layout
-	level_snd    [3][2]int32
+	level_snd    [5][2]int32
 	midpower     float32
 	midpowerMin  float32
 	prevLevel    int32
@@ -175,7 +175,7 @@ type PowerBar struct {
 
 func newPowerBar(snd *Snd) (pb *PowerBar) {
 	pb = &PowerBar{snd: snd, counter_font: [3]int32{-1},
-		level_snd: [...][2]int32{{-1}, {-1}, {-1}}}
+		level_snd: [...][2]int32{{-1}, {-1}, {-1}, {-1}, {-1}}}
 	return
 }
 func readPowerBar(pre string, is IniSection,
@@ -202,7 +202,7 @@ func readPowerBar(pre string, is IniSection,
 	}
 	return pb
 }
-func (pb *PowerBar) step(power float32, level int32) {
+func (pb *PowerBar) step(power float32, level int32, levelMax int32) {
 	pb.midpower -= 1.0 / 144
 	if power < pb.midpowerMin {
 		pb.midpowerMin += (power - pb.midpowerMin) *
@@ -213,9 +213,13 @@ func (pb *PowerBar) step(power float32, level int32) {
 	if pb.midpower < pb.midpowerMin {
 		pb.midpower = pb.midpowerMin
 	}
-	if level > pb.prevLevel {
-		i := Min(2, level-1)
-		pb.snd.play(pb.level_snd[i])
+	if level > pb.prevLevel{		
+		if level != levelMax{		
+			i := Min(3, level-1)
+			pb.snd.play(pb.level_snd[i])			
+		} else {
+			pb.snd.play(pb.level_snd[4])
+		  }	
 	}
 	pb.prevLevel = level
 	pb.bg0.Action()
@@ -1592,7 +1596,7 @@ func (l *Lifebar) step() {
 	for ti := range sys.tmode {
 		for i := ti; i < l.num[1][ti]; i += 2 {
 			l.pb[l.ref[1][ti]][i].step(float32(sys.chars[i][0].power)/
-				float32(sys.chars[i][0].powerMax), sys.chars[i][0].power/1000)
+				float32(sys.chars[i][0].powerMax), sys.chars[i][0].power/1000, sys.chars[i][0].powerMax/1000)
 		}
 	}
 	for ti := range sys.tmode {
