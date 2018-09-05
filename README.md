@@ -17,3 +17,6 @@ In Fight.def -> [Powerbar] use p1.partial_bar > 0 for show partial bar (Full eve
 4. Play Sound for Maximum Power Level
 In Fight.def -> [Powerbar] use 'level5.snd' for play sond when Power = MaxPower (Maximum Level) 
 
+5. Add other PAUSE and STEP shortcut
+"Pause" = PAUSE ou F11 / "Step" = SCROLLLOCK or F10
+*some notebooks keyboards do not have PAUSE or SCROLL LOCK keys.
