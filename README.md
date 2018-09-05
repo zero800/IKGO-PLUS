@@ -6,17 +6,17 @@ Personal modification in fighting game engine based on Mugen.
 
 ## New features
 
--Add OpenAL32.dll, no need more OpenAL 1.1 Windows Installer
+1. Add OpenAL32.dll, no need more OpenAL 1.1 Windows Installer
 
-2. Optional, show different animation for Full power bar. 
- In Fight.def -> [Powerbar] use "p1.fullfront.spr" or "p1.fullfront.anim" for show different Full power bar. 
+2. Optional, show different animation for Full power bar. <BR>
+In Fight.def -> [Powerbar] use "p1.fullfront.spr" or "p1.fullfront.anim" for show different Full power bar. 
 
--Partial counter for Powerbar. 
+3. Partial counter for Powerbar. <BR>
 In Fight.def -> [Powerbar] use p1.partial_bar > 0 for show partial bar (Full every 1000) like kof games. 
 
--Play Sound for Maximum Power Level 
+4. Play Sound for Maximum Power Level <BR>
 In Fight.def -> [Powerbar] use 'level5.snd' for play sond when Power = MaxPower (Maximum Level) 
 
--Add other PAUSE and STEP shortcut 
-"Pause" = PAUSE ou F11 / "Step" = SCROLLLOCK or F10 
-*some notebooks keyboards do not have PAUSE or SCROLL LOCK keys.
+5. Add other PAUSE and STEP shortcut <BR>
+"Pause" = PAUSE ou F11 / "Step" = SCROLLLOCK or F10 <BR>
+*some notebooks keyboards do not have PAUSE or SCROLL LOCK keys. <BR>
