@@ -8,8 +8,8 @@ Personal modification in fighting game engine based on Mugen.
 
 -Add OpenAL32.dll, no need more OpenAL 1.1 Windows Installer
 
--Optional, show different animation for Full power bar. 
-In Fight.def -> [Powerbar] use "p1.fullfront.spr" or "p1.fullfront.anim" for show different Full power bar. 
+2. Optional, show different animation for Full power bar. 
+ In Fight.def -> [Powerbar] use "p1.fullfront.spr" or "p1.fullfront.anim" for show different Full power bar. 
 
 -Partial counter for Powerbar. 
 In Fight.def -> [Powerbar] use p1.partial_bar > 0 for show partial bar (Full every 1000) like kof games. 
