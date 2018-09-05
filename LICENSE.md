@@ -1,6 +1,6 @@
 BSD 3-Clause License
 
-Copyright (c) 2016, Suehiro
+Copyright (c) 2018, Zero800
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
