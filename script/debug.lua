@@ -27,7 +27,8 @@ if getAllowDebugKeys() then
 end
 addHotkey('PAUSE', false, false, false, 'togglePause()')
 addHotkey('SCROLLLOCK', false, false, false, 'step()')
-
+addHotkey('F11', false, false, false, 'togglePause()')
+addHotkey('F10', false, false, false, 'step()')
 
 speed = 1.0
 
